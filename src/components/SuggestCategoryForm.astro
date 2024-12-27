@@ -1,0 +1,48 @@
+---
+import { getGameInfo } from '@/lib/rawg'
+---
+
+<div class="rounded-xl border bg-card p-6">
+  <h3 class="mb-4 text-xl font-semibold">Suggest a Category</h3>
+
+  <form id="suggest-form" class="space-y-4">
+    <div>
+      <label class="mb-1 block text-sm font-medium">Category Title</label>
+      <input
+        type="text"
+        name="title"
+        required
+        class="w-full rounded-lg border border-border bg-secondary/50 p-2"
+      />
+    </div>
+
+    <div>
+      <label class="mb-1 block text-sm font-medium">Description</label>
+      <textarea
+        name="description"
+        required
+        class="w-full rounded-lg border border-border bg-secondary/50 p-2"
+      ></textarea>
+    </div>
+
+    <div>
+      <label class="mb-1 block text-sm font-medium"
+        >Featured Games (3 required)</label
+      >
+      <div class="space-y-2" id="games-container">
+        <!-- Game inputs will be added here -->
+      </div>
+    </div>
+
+    <button
+      type="submit"
+      class="w-full rounded-lg bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90"
+    >
+      Submit Suggestion
+    </button>
+  </form>
+</div>
+
+<script>
+  // Add client-side form handling
+</script>

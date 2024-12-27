@@ -1,0 +1,50 @@
+---
+import Layout from '@/layouts/Layout.astro'
+---
+
+<Layout>
+  <div
+    class="container mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-16 text-center"
+  >
+    <h1 class="gradient-text mb-6 text-4xl font-bold md:text-6xl">
+      PlayerDriven
+    </h1>
+    <p class="mb-12 max-w-[600px] text-xl text-muted-foreground md:text-2xl">
+      Where gamers shape the rankings. Vote, discover, and influence the gaming
+      landscape.
+    </p>
+
+    <div class="grid w-full max-w-4xl grid-cols-1 gap-8 md:grid-cols-2">
+      <a
+        href="/categories"
+        class="group relative overflow-hidden rounded-xl border bg-card p-8 transition-colors hover:border-primary/50"
+      >
+        <h3 class="mb-4 text-2xl font-semibold">Top Rankings</h3>
+        <p class="text-muted-foreground">
+          Discover the highest-rated games across different categories, voted by
+          players like you.
+        </p>
+      </a>
+
+      <a
+        href="/categories"
+        class="group relative overflow-hidden rounded-xl border bg-card p-8 transition-colors hover:border-primary/50"
+      >
+        <h3 class="mb-4 text-2xl font-semibold">Cast Your Vote</h3>
+        <p class="text-muted-foreground">
+          Make your voice heard. Vote for your favorite games and influence the
+          rankings.
+        </p>
+      </a>
+    </div>
+
+    <div class="mt-16">
+      <a
+        href="/categories"
+        class="inline-block rounded-lg bg-primary px-8 py-3 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+      >
+        Get Started
+      </a>
+    </div>
+  </div>
+</Layout>

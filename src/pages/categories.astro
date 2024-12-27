@@ -1,0 +1,118 @@
+---
+import { getCategories, type CategoryGame } from '@/db/queries/categories'
+import Layout from '@/layouts/Layout.astro'
+import { getGameInfo, type RAWGGame } from '@/lib/rawg'
+
+interface GameWithInfo extends CategoryGame {
+  info: RAWGGame | null
+}
+
+// Get categories from database
+const categories = await getCategories()
+
+// Create sorted categories with featured games
+const sortedCategories = categories
+  .map((category) => ({
+    ...category,
+    featured: category.featured.map((game: CategoryGame) => ({
+      name: game.name,
+      rawgId: game.rawgId,
+      slug: game.slug,
+      backgroundImage: game.backgroundImage ?? undefined,
+    })),
+  }))
+  .sort((a, b) => (a.order || 0) - (b.order || 0))
+
+const gamesWithInfo = await Promise.all(
+  sortedCategories.flatMap((category) =>
+    category.featured.map(async (game: CategoryGame) => ({
+      ...game,
+      info: await getGameInfo(game.name),
+    }))
+  )
+)
+
+const gameInfoMap = new Map<string, RAWGGame | null>(
+  gamesWithInfo.map((game: GameWithInfo) => [game.name, game.info])
+)
+---
+
+<Layout title="Categories - PlayerDriven">
+  <div class="container mx-auto px-4 py-16">
+    <h1 class="gradient-text mb-12 text-center text-4xl font-bold">
+      Gaming Categories
+    </h1>
+
+    <div class="grid gap-8">
+      {
+        sortedCategories.map((category) => (
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <h2 class="text-2xl font-semibold">{category.title}</h2>
+              <a
+                href={`/categories/${category.id}`}
+                class="text-sm text-primary hover:text-primary/80"
+              >
+                View All →
+              </a>
+            </div>
+            <p class="text-muted-foreground">{category.description}</p>
+
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {category.featured.map((game) => {
+                const gameInfo = gameInfoMap.get(game.name)
+                return (
+                  <a
+                    href={`/games/${game.slug}`}
+                    class="group relative overflow-hidden rounded-xl bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+                  >
+                    {/* Image Container */}
+                    <div class="relative aspect-[16/9] overflow-hidden">
+                      <div class="absolute inset-0 z-10 bg-gradient-to-t from-black/60 to-transparent" />
+                      <img
+                        src={
+                          gameInfo?.background_image ||
+                          `https://placehold.co/600x400?text=${encodeURIComponent(game.name)}`
+                        }
+                        alt={game.name}
+                        class="h-full w-full transform object-cover transition-transform duration-300 group-hover:scale-110"
+                      />
+                    </div>
+
+                    {/* Game Info Overlay */}
+                    <div class="absolute bottom-0 left-0 right-0 z-20 p-4">
+                      <h3 class="group-hover:gradient-text mb-2 text-lg font-medium text-white transition-colors">
+                        {game.name}
+                      </h3>
+                      <div class="flex items-center gap-2 text-sm text-white/80">
+                        <span class="rounded-md bg-primary/20 px-2 py-1 backdrop-blur-sm">
+                          {category.title}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Hover Overlay */}
+                    <div class="absolute inset-0 bg-primary/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  </a>
+                )
+              })}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .gradient-text {
+    background-size: 200% auto;
+    animation: shine 2s linear infinite;
+  }
+
+  @keyframes shine {
+    to {
+      background-position: 200% center;
+    }
+  }
+</style>

@@ -1,0 +1,49 @@
+---
+const links = [
+  { name: 'Categories', href: '/categories' },
+  { name: 'Latest', href: '/latest' },
+  { name: 'Popular', href: '/popular' },
+]
+---
+
+<header
+  class="fixed top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-sm"
+>
+  <div class="container mx-auto px-4">
+    <nav class="flex h-16 items-center justify-between">
+      <a href="/" class="gradient-text text-xl font-bold"> PlayerDriven </a>
+
+      <div class="hidden items-center space-x-8 md:flex">
+        {
+          links.map((link) => (
+            <a
+              href={link.href}
+              class="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              {link.name}
+            </a>
+          ))
+        }
+      </div>
+
+      <button class="rounded-lg p-2 hover:bg-secondary/80 md:hidden">
+        <span class="sr-only">Open menu</span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="4" x2="20" y1="12" y2="12"></line>
+          <line x1="4" x2="20" y1="6" y2="6"></line>
+          <line x1="4" x2="20" y1="18" y2="18"></line>
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>
